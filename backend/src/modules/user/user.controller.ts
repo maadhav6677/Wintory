@@ -19,7 +19,7 @@ export class UserController {
         throw new ForbiddenError('Access denied: User belongs to a different store');
       }
 
-      const { passwordHash, ...safeUser } = user;
+      const { passwordHash: _, ...safeUser } = user;
       res.status(200).json({
         success: true,
         data: safeUser,
@@ -34,7 +34,7 @@ export class UserController {
       const currentUser = req.user!;
       const users = await userService.getUsersByStore(currentUser.storeId);
 
-      const safeUsers = users.map(({ passwordHash, ...user }) => user);
+      const safeUsers = users.map(({ passwordHash: _, ...user }) => user);
 
       res.status(200).json({
         success: true,
@@ -64,7 +64,7 @@ export class UserController {
         storeId: userData.storeId,
       });
 
-      const { passwordHash, ...safeUser } = newUser;
+      const { passwordHash: _, ...safeUser } = newUser;
 
       res.status(201).json({
         success: true,
@@ -94,7 +94,7 @@ export class UserController {
         role: updateData.role,
       });
 
-      const { passwordHash, ...safeUser } = updatedUser;
+      const { passwordHash: _, ...safeUser } = updatedUser;
 
       res.status(200).json({
         success: true,
