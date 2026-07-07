@@ -29,7 +29,7 @@ export class UserService {
     }
 
     const hashedPassword = await hashPassword(data.passwordHash);
-    
+
     return this.userRepository.create({
       ...data,
       passwordHash: hashedPassword,

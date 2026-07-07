@@ -2,13 +2,16 @@ import { Store, User, Prisma, Role } from '@prisma/client';
 import { prisma } from '../../config/db.js';
 
 export interface IAuthRepository {
-  createStoreWithOwner(storeName: string, ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>): Promise<{ store: Store; owner: User }>;
+  createStoreWithOwner(
+    storeName: string,
+    ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>,
+  ): Promise<{ store: Store; owner: User }>;
 }
 
 export class AuthRepository implements IAuthRepository {
   async createStoreWithOwner(
     storeName: string,
-    ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>
+    ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>,
   ): Promise<{ store: Store; owner: User }> {
     return prisma.$transaction(async (tx) => {
       // 1. Create the new Store organization

@@ -14,7 +14,7 @@ export class UserController {
 
       // Multitenancy: Check if target user belongs to same store
       const user = await userService.getUserById(id);
-      
+
       if (user.storeId !== currentUser.storeId) {
         throw new ForbiddenError('Access denied: User belongs to a different store');
       }
@@ -33,7 +33,7 @@ export class UserController {
     try {
       const currentUser = req.user!;
       const users = await userService.getUsersByStore(currentUser.storeId);
-      
+
       const safeUsers = users.map(({ passwordHash, ...user }) => user);
 
       res.status(200).json({

@@ -3,12 +3,16 @@ import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 import { connectDb, prisma } from './config/db.js';
 import { closeQueues } from './config/queue.js';
+import { initWorkers, closeWorkers } from './workers/index.js';
 
 const PORT = env.PORT;
 
 const startServer = async () => {
   // Connect database
   await connectDb();
+
+  // Initialize BullMQ workers
+  initWorkers();
 
   // Start Express listener
   const server = app.listen(PORT, () => {
@@ -22,9 +26,10 @@ const startServer = async () => {
 
     server.close(async () => {
       logger.info('HTTP server closed.');
-      
+
       try {
-        // Disconnect queues
+        // Disconnect queues and workers
+        await closeWorkers();
         await closeQueues();
 
         // Disconnect database

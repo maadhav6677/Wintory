@@ -41,13 +41,17 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
 
+# Copy entrypoint script
+COPY entrypoint.sh ./
+RUN chmod +x entrypoint.sh
+
 # Add a non-root system user for security
 RUN addgroup -g 1001 -S nodejs \
-    && adduser -S nestuser -u 1001 -G nodejs \
-    && chown -R nestuser:nodejs /usr/src/app
+    && adduser -S appuser -u 1001 -G nodejs \
+    && chown -R appuser:nodejs /usr/src/app
 
-USER nestuser
+USER appuser
 
 EXPOSE 3000
 
-CMD ["node", "dist/server.js"]
+ENTRYPOINT ["./entrypoint.sh"]
