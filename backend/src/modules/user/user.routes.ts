@@ -11,31 +11,16 @@ const userRouter = Router();
 // Apply auth middleware globally to all user endpoints
 userRouter.use(authenticate);
 
-userRouter.route('/')
-  .get(
-    authorize([Role.ADMIN, Role.MANAGER]),
-    UserController.getStoreUsers
-  )
-  .post(
-    authorize([Role.ADMIN]),
-    validate(createUserSchema),
-    UserController.createUser
-  );
+userRouter
+  .route('/')
+  .get(authorize([Role.ADMIN, Role.MANAGER]), UserController.getStoreUsers)
+  .post(authorize([Role.ADMIN]), validate(createUserSchema), UserController.createUser);
 
-userRouter.route('/:id')
-  .get(
-    validate(userIdParamsSchema),
-    UserController.getProfile
-  )
-  .put(
-    validate(updateUserSchema),
-    UserController.updateUser
-  )
-  .delete(
-    authorize([Role.ADMIN]),
-    validate(userIdParamsSchema),
-    UserController.deleteUser
-  );
+userRouter
+  .route('/:id')
+  .get(validate(userIdParamsSchema), UserController.getProfile)
+  .put(validate(updateUserSchema), UserController.updateUser)
+  .delete(authorize([Role.ADMIN]), validate(userIdParamsSchema), UserController.deleteUser);
 
 export { userRouter };
 export default userRouter;

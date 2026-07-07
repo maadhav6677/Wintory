@@ -8,7 +8,7 @@ export const errorHandler = (
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction
+  _next: NextFunction,
 ): void => {
   let statusCode = 500;
   let errorCode = 'INTERNAL_SERVER_ERROR';
@@ -22,7 +22,9 @@ export const errorHandler = (
     details = err.details;
 
     // Log operational errors as warnings or info
-    logger.warn(`Operational Error: [${req.method}] ${req.path} - Status: ${statusCode} - Code: ${errorCode} - Message: ${message}`);
+    logger.warn(
+      `Operational Error: [${req.method}] ${req.path} - Status: ${statusCode} - Code: ${errorCode} - Message: ${message}`,
+    );
   } else {
     // Unhandled application crash / native errors (e.g. database disconnect, reference errors)
     logger.error(`System Error: [${req.method}] ${req.path}`, err);

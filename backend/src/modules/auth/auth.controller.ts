@@ -26,7 +26,7 @@ export class AuthController {
   public static async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { storeName, email, password, firstName, lastName } = req.body;
-      
+
       const result = await authService.registerStore(storeName, {
         email,
         passwordHash: password,

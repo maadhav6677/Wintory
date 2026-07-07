@@ -19,7 +19,7 @@ export interface RegisterResult {
 export class AuthService {
   constructor(
     private readonly authRepository: IAuthRepository,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
   ) {}
 
   async login(email: string, password: string): Promise<LoginResult> {
@@ -47,7 +47,7 @@ export class AuthService {
 
   async registerStore(
     storeName: string,
-    ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>
+    ownerData: Omit<Prisma.UserUncheckedCreateInput, 'storeId' | 'role'>,
   ): Promise<RegisterResult> {
     const existingUser = await this.userRepository.findByEmail(ownerData.email);
     if (existingUser) {
