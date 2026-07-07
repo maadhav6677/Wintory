@@ -8,6 +8,20 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
   let errorCode = 'INTERNAL_SERVER_ERROR';
   let message = 'An unexpected error occurred';
   let details: unknown = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ErrorDetails = Record<string, any>;
+
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
+): void => {
+  let statusCode = 500;
+  let errorCode = 'INTERNAL_SERVER_ERROR';
+  let message = 'An unexpected error occurred';
+  let details: ErrorDetails | null = null;
 
   if (err instanceof AppError) {
     statusCode = err.statusCode;
