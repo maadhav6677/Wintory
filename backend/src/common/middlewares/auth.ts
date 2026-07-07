@@ -20,7 +20,7 @@ export const authenticate = (req: Request, _res: Response, next: NextFunction): 
       storeId: decoded.storeId,
     };
     next();
-  } catch (error) {
+  } catch {
     next(new UnauthorizedError('Token is invalid or expired'));
   }
 };

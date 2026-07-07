@@ -40,7 +40,7 @@ export class AuthService {
       storeId: user.storeId,
     });
 
-    const { passwordHash, ...safeUser } = user;
+    const { passwordHash: _, ...safeUser } = user;
 
     return { token, user: safeUser };
   }
@@ -68,7 +68,7 @@ export class AuthService {
       storeId: owner.storeId,
     });
 
-    const { passwordHash, ...safeOwner } = owner;
+    const { passwordHash: _, ...safeOwner } = owner;
 
     return { token, store, owner: safeOwner };
   }

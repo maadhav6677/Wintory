@@ -11,6 +11,7 @@ export interface JwtPayload {
 
 export const generateToken = (payload: JwtPayload): string => {
   return jwt.sign(payload, env.JWT_SECRET, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expiresIn: env.JWT_EXPIRES_IN as any,
   });
 };

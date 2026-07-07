@@ -1,15 +1,25 @@
 import { Inventory, Prisma } from '@prisma/client';
 import { prisma } from '../../config/db.js';
 
+export type InventoryWithProduct = Prisma.InventoryGetPayload<{
+  include: {
+    product: {
+      include: {
+        store: true;
+      };
+    };
+  };
+}>;
+
 export interface IInventoryRepository {
-  findByProductId(productId: string): Promise<Inventory | null>;
+  findByProductId(productId: string): Promise<InventoryWithProduct | null>;
   findAllByStoreId(storeId: string): Promise<Inventory[]>;
   findLowStock(storeId: string): Promise<Inventory[]>;
   update(productId: string, data: Prisma.InventoryUpdateInput): Promise<Inventory>;
 }
 
 export class InventoryRepository implements IInventoryRepository {
-  async findByProductId(productId: string): Promise<Inventory | null> {
+  async findByProductId(productId: string): Promise<InventoryWithProduct | null> {
     return prisma.inventory.findUnique({
       where: { productId },
       include: {

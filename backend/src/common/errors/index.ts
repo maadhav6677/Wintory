@@ -2,9 +2,9 @@ export class AppError extends Error {
   public readonly statusCode: number;
   public readonly errorCode: string;
   public readonly isOperational: boolean;
-  public readonly details: any;
+  public readonly details: unknown;
 
-  constructor(message: string, statusCode: number, errorCode = 'INTERNAL_ERROR', details: any = null) {
+  constructor(message: string, statusCode: number, errorCode = 'INTERNAL_ERROR', details: unknown = null) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
     this.statusCode = statusCode;
@@ -16,7 +16,7 @@ export class AppError extends Error {
 }
 
 export class BadRequestError extends AppError {
-  constructor(message = 'Bad request', errorCode = 'BAD_REQUEST', details: any = null) {
+  constructor(message = 'Bad request', errorCode = 'BAD_REQUEST', details: unknown = null) {
     super(message, 400, errorCode, details);
   }
 }
@@ -46,7 +46,7 @@ export class ConflictError extends AppError {
 }
 
 export class ValidationError extends AppError {
-  constructor(details: any, message = 'Validation failed') {
+  constructor(details: unknown, message = 'Validation failed') {
     super(message, 400, 'VALIDATION_ERROR', details);
   }
 }

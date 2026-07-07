@@ -3,17 +3,11 @@ import { AppError } from '../errors/index.js';
 import { logger } from '../../config/logger.js';
 import { env } from '../../config/env.js';
 
-export const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction,
-): void => {
+export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
   let statusCode = 500;
   let errorCode = 'INTERNAL_SERVER_ERROR';
   let message = 'An unexpected error occurred';
-  let details: any = null;
+  let details: unknown = null;
 
   if (err instanceof AppError) {
     statusCode = err.statusCode;

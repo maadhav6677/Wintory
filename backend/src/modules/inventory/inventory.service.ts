@@ -1,18 +1,18 @@
 import { Inventory } from '@prisma/client';
-import { IInventoryRepository } from './inventory.repository.js';
+import { IInventoryRepository, InventoryWithProduct } from './inventory.repository.js';
 import { NotFoundError } from '../../common/errors/index.js';
 
 export class InventoryService {
   constructor(private readonly inventoryRepository: IInventoryRepository) {}
 
-  async getByProductId(productId: string, storeId: string): Promise<Inventory> {
+  async getByProductId(productId: string, storeId: string): Promise<InventoryWithProduct> {
     const inventory = await this.inventoryRepository.findByProductId(productId);
     if (!inventory) {
       throw new NotFoundError('Inventory record not found for this product');
     }
 
     // Multi-tenancy: verify product belongs to the user's store
-    const product = (inventory as any).product;
+    const product = inventory.product;
     if (product && product.store && product.store.id !== storeId) {
       throw new NotFoundError('Inventory record not found for this product');
     }

@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from './logger.js';
 import { env } from './env.js';
 
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
@@ -27,7 +26,8 @@ if (env.NODE_ENV === 'development') {
 
 // Log queries in development
 if (env.NODE_ENV === 'development' && 'on' in prisma) {
-  (prisma as any).$on('query', (e: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (prisma as any).$on('query', (e: Prisma.QueryEvent) => {
     logger.debug(`Query: ${e.query} - Params: ${e.params} - Duration: ${e.duration}ms`);
   });
 }
