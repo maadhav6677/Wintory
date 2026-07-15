@@ -43,7 +43,14 @@ describe('AuthService', () => {
 
       mockUserRepository.findByEmail = vi.fn().mockResolvedValue(null);
       mockAuthRepository.createStoreWithOwner = vi.fn().mockResolvedValue({
-        store: { id: 'store-123', name: storeName, code: null, isActive: true, createdAt: mockDate, updatedAt: mockDate },
+        store: {
+          id: 'store-123',
+          name: storeName,
+          code: null,
+          isActive: true,
+          createdAt: mockDate,
+          updatedAt: mockDate,
+        },
         owner: {
           id: 'user-123',
           email: ownerData.email,
@@ -67,7 +74,11 @@ describe('AuthService', () => {
         ...ownerData,
         passwordHash: expect.any(String),
       });
-      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith('user-123', expect.any(String), expect.any(Date));
+      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith(
+        'user-123',
+        expect.any(String),
+        expect.any(Date),
+      );
       expect(result.accessToken).toBeDefined();
       expect(result.refreshToken).toBeDefined();
       expect(result.store.name).toBe(storeName);
@@ -99,9 +110,9 @@ describe('AuthService', () => {
     test('should authenticate and issue access and refresh tokens on valid credentials', async () => {
       const loginEmail = 'owner@organic.com';
       const rawPassword = 'rawPassword';
-      
+
       const bcrypt = await import('bcryptjs');
-      const hashedPassword = await bcrypt.genSalt(10).then(salt => bcrypt.hash(rawPassword, salt));
+      const hashedPassword = await bcrypt.genSalt(10).then((salt) => bcrypt.hash(rawPassword, salt));
 
       mockUserRepository.findByEmail = vi.fn().mockResolvedValue({
         id: 'user-123',
@@ -121,7 +132,11 @@ describe('AuthService', () => {
       const result = await authService.login(loginEmail, rawPassword);
 
       expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(loginEmail);
-      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith('user-123', expect.any(String), expect.any(Date));
+      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith(
+        'user-123',
+        expect.any(String),
+        expect.any(Date),
+      );
       expect(result.accessToken).toBeDefined();
       expect(result.refreshToken).toBeDefined();
       expect(result.user.email).toBe(loginEmail);
@@ -130,7 +145,7 @@ describe('AuthService', () => {
 
     test('should throw UnauthorizedError on invalid password', async () => {
       const loginEmail = 'owner@organic.com';
-      
+
       mockUserRepository.findByEmail = vi.fn().mockResolvedValue({
         id: 'user-123',
         email: loginEmail,
@@ -172,7 +187,11 @@ describe('AuthService', () => {
 
       expect(mockAuthRepository.findRefreshToken).toHaveBeenCalledWith(signedOldToken);
       expect(mockAuthRepository.revokeRefreshToken).toHaveBeenCalledWith(signedOldToken);
-      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith('user-123', expect.any(String), expect.any(Date));
+      expect(mockAuthRepository.saveRefreshToken).toHaveBeenCalledWith(
+        'user-123',
+        expect.any(String),
+        expect.any(Date),
+      );
       expect(result.accessToken).toBeDefined();
       expect(result.refreshToken).toBeDefined();
       expect(result.refreshToken).not.toBe(signedOldToken);

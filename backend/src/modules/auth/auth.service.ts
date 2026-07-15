@@ -3,11 +3,7 @@ import { IAuthRepository } from './auth.repository.js';
 import { IUserRepository } from '../user/user.repository.js';
 import { ConflictError, UnauthorizedError } from '../../common/errors/index.js';
 import { comparePassword, hashPassword } from '../../common/utils/hash.js';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-} from '../../common/utils/jwt.js';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../../common/utils/jwt.js';
 import { env } from '../../config/env.js';
 
 export interface LoginResult {
