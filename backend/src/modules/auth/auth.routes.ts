@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AuthController } from './auth.controller.js';
 import { validate } from '../../common/middlewares/validate.js';
-import { loginSchema, registerStoreSchema } from './auth.validation.js';
+import { loginSchema, registerStoreSchema, refreshTokenSchema } from './auth.validation.js';
 
 const authRouter = Router();
 
@@ -73,6 +73,54 @@ authRouter.post('/login', validate(loginSchema), AuthController.login);
  *         description: Email address already exists
  */
 authRouter.post('/register', validate(registerStoreSchema), AuthController.register);
+
+/**
+ * @openapi
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh the access token using a valid refresh token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *     responses:
+ *       200:
+ *         description: Tokens refreshed successfully
+ *       401:
+ *         description: Invalid or expired refresh token
+ */
+authRouter.post('/refresh', validate(refreshTokenSchema), AuthController.refresh);
+
+/**
+ * @openapi
+ * /auth/logout:
+ *   post:
+ *     summary: Log out a user by revoking their refresh token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ */
+authRouter.post('/logout', validate(refreshTokenSchema), AuthController.logout);
 
 export { authRouter };
 export default authRouter;

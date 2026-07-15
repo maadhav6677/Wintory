@@ -43,4 +43,33 @@ export class AuthController {
       next(error);
     }
   }
+
+  public static async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { refreshToken } = req.body;
+      const result = await authService.refresh(refreshToken);
+
+      res.status(200).json({
+        success: true,
+        message: 'Tokens refreshed successfully',
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { refreshToken } = req.body;
+      await authService.logout(refreshToken);
+
+      res.status(200).json({
+        success: true,
+        message: 'Logged out successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
