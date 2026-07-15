@@ -16,3 +16,9 @@ export const registerStoreSchema = {
     lastName: z.string().min(1, 'Last name is required'),
   }),
 };
+
+export const refreshTokenSchema = {
+  body: z.object({
+    refreshToken: z.string().min(1, 'Refresh token is required'),
+  }),
+};

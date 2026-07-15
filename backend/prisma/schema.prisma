@@ -59,6 +59,7 @@ model User {
   storeId      String
   store        Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   sales        Sale[]
+  refreshTokens RefreshToken[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -223,3 +224,17 @@ model Notification {
   @@index([storeId])
   @@map("notifications")
 }
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  isRevoked Boolean  @default(false)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
